@@ -7,23 +7,23 @@ import com.DeliveryOnTimeBackend.Backend.repository.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.DeliveryOnTimeBackend.Backend.model.user;
+import com.DeliveryOnTimeBackend.Backend.model.User;
 
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/User")
 public class UserController {
 
 @Autowired
 private UserRepository userRepository;
 
 @GetMapping
-public List<user> getAllUsers(){
+public List<User> getAllUsers(){
     return userRepository.findAll();
 }
 
 @PostMapping
-public user addUser(@RequestBody user User){
+public User addUser(@RequestBody User User){
     return userRepository.save(User);
 
 }

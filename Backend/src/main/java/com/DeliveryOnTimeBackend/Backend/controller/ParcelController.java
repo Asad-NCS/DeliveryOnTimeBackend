@@ -3,7 +3,6 @@
 package com.DeliveryOnTimeBackend.Backend.controller;
 
 
-import com.DeliveryOnTimeBackend.Backend.model.user;
 import com.DeliveryOnTimeBackend.Backend.repository.ParcelRepository;
 import com.DeliveryOnTimeBackend.Backend.model.Parcel;
 import org.springframework.beans.factory.annotation.Autowired;
