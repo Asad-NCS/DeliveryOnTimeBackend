@@ -3,22 +3,23 @@ package com.DeliveryOnTimeBackend.Backend.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class user {
 
     @Id
-    @GeneratedValue
-    Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
     String name;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

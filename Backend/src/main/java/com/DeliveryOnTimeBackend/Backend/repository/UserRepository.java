@@ -7,7 +7,7 @@ import com.DeliveryOnTimeBackend.Backend.model.user;
 
 
 @Repository
-public interface UserRepository extends JpaRepository <user,Integer>{
+public interface UserRepository extends JpaRepository <user,Long>{
 
 
     
