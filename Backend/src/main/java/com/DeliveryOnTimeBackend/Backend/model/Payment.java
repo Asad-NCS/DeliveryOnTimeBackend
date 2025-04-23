@@ -16,11 +16,11 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long PaymentId;
+    private Long paymentId;
 
     private String method;
     private double amount;
-    private String PaymentDate;
+    private String paymentDate;
 
 
 

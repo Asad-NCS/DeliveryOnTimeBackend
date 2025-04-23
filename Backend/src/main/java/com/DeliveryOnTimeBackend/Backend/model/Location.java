@@ -18,8 +18,8 @@ import lombok.Setter;
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long LocationId;
+    private Long locationId;
 
-    private String Country;
-    private String City;
+    private String country;
+    private String city;
 }

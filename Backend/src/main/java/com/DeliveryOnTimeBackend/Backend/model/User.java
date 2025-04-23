@@ -1,5 +1,6 @@
 package com.DeliveryOnTimeBackend.Backend.model;
 
+import com.DeliveryOnTimeBackend.Backend.extras.AccountType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,9 +17,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     private String name;
     private String email;
     private String phone;
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 }

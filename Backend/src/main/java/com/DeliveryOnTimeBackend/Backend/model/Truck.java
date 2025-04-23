@@ -14,5 +14,5 @@ import lombok.Setter;
 
 public class Truck extends Vehicle {
 
-    private double truckcapacity;
+    private double truckCapacity;
 }

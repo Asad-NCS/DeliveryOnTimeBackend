@@ -1,4 +1,7 @@
 package com.DeliveryOnTimeBackend.Backend.repository;
 
-public interface VehicleRepository {
+import com.DeliveryOnTimeBackend.Backend.model.Vehicle;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 }

@@ -15,7 +15,8 @@ import lombok.Setter;
 public class Rider extends User {
 
     @OneToOne
-    private Vehicle vehicle;
+    @JoinColumn(name = "vehicleId", referencedColumnName = "vehicleId")
+    private Vehicle vehicleId;
 
 
 }

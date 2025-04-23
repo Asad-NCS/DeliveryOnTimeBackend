@@ -16,10 +16,10 @@ public class Rating {
 
   @Id
   @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long RatingId;
+    private Long ratingId;
 
   private int stars;
-  private String Review;
+  private String review;
 
   @ManyToOne
     private Rider rider;

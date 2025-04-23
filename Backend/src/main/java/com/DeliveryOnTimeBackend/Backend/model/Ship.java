@@ -13,5 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class Ship extends Vehicle{
-    private double cargocapacity;
+    private double cargoCapacity;
 }

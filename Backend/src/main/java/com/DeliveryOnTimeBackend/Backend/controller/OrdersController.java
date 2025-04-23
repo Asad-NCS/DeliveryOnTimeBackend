@@ -21,7 +21,7 @@ public class OrdersController {
     @Autowired
     OrdersRepository ordersRepository;
 
-    @PostMapping
+    @PostMapping("addOrder")
     public Orders addorder(@RequestBody Orders order) {
         System.out.println("Saving parcel: " + order);
         return ordersRepository.save(order);
@@ -38,23 +38,6 @@ public class OrdersController {
         return ResponseEntity.ok("parcel_id set to: " + parcelId);
     }*/
 
-    @PostMapping("/sendParcelId")
-    public ResponseEntity<String> setParcelId(@RequestBody Map<String, Long> payload) {
-        Long parcelId = payload.get("parcel_id");
-        Long orderId = payload.get("order_id");
 
-        // Fetch the order from DB
-        Orders order = ordersRepository.findById(orderId).orElse(null);
-
-        if (order == null) {
-            return ResponseEntity.badRequest().body("Order not found with id: " + orderId);
-        }
-
-        // Set the parcel ID and save
-        order.setParcel_id(parcelId);
-        ordersRepository.save(order);
-
-        return ResponseEntity.ok("parcel_id set to: " + parcelId + " for order_id: " + orderId);
-    }
 
 }
