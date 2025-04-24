@@ -37,7 +37,7 @@ public class Parcel{
     @JoinColumn(name = "destinationId", referencedColumnName = "locationId")
     private Location destinationId;
 
-    @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parcelId", cascade = CascadeType.ALL)
     private List<ParcelLog> logs;
 
 

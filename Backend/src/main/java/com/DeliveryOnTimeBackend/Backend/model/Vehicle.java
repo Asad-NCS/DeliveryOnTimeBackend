@@ -1,6 +1,7 @@
 package com.DeliveryOnTimeBackend.Backend.model;
 
 
+import com.DeliveryOnTimeBackend.Backend.extras.VehicleStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,10 +19,17 @@ public abstract class Vehicle {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-
     private Long vehicleId;
+
     private String model;
     private String licenseNumber;
-    private String status;
 
+    @Enumerated(EnumType.STRING)
+    private VehicleStatus status;
+
+    public Vehicle(String model, String licenseNumber, VehicleStatus status) {
+        this.model = model;
+        this.licenseNumber = licenseNumber;
+        this.status = status;
+    }
 }
