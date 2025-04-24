@@ -28,8 +28,12 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private ParcelStatus status;
     String placementDate;
-    long customerId;
-    long paymentId;
+    @ManyToOne
+    @JoinColumn(name = "customerID", referencedColumnName = "customerId")
+    private Customer customerId;
+    @ManyToOne
+    @JoinColumn(name = "paymentId", referencedColumnName = "paymentId")
+    private Payment paymentId;
 
     }
 

@@ -3,8 +3,10 @@
 package com.DeliveryOnTimeBackend.Backend.extras;
 
 public enum ParcelStatus {
-    PENDING,
+    PICKED_UP,
     IN_TRANSIT,
+    AT_WAREHOUSE,
+    OUT_FOR_DELIVERY,
     DELIVERED,
-    CANCELLED
+    FAILED_DELIVERY
 }

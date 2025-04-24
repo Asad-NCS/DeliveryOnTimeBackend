@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -25,12 +27,18 @@ public class Parcel{
 
     private String type;
     private float weight;
-    private long orderId;
-    private long originId;
-    private long destinationId;
+    @OneToOne
+    @JoinColumn(name = "orderId", referencedColumnName = "orderId")
+    private Orders orderId;
+    @ManyToOne
+    @JoinColumn(name = "originId", referencedColumnName = "locationId")
+    private Location originId;
+    @ManyToOne
+    @JoinColumn(name = "destinationId", referencedColumnName = "locationId")
+    private Location destinationId;
 
-    @Enumerated(EnumType.STRING)
-    ParcelStatus status;
+    @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL)
+    private List<ParcelLog> logs;
 
 
 

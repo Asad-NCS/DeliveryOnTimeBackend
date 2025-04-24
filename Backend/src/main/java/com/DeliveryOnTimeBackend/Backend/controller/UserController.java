@@ -31,7 +31,7 @@ public User addUser(@RequestBody User user){
     return userRepository.save(user);
 }
 
-   @PostMapping("signUp")
+   @PostMapping("/signUp")
    ResponseEntity<?> signUp(@RequestBody User user){
 
     if(userRepository.findByEmail(user.getEmail()).isPresent()){
