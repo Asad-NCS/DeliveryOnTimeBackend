@@ -12,11 +12,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
+@PrimaryKeyJoinColumn(name = "riderId")
 public class Rider extends User {
 
+  /*  @OneToOne
+    @JoinColumn(name ="riderId",referencedColumnName = "userId")
+    User riderId;
+*/
     @OneToOne
     @JoinColumn(name = "vehicleId", referencedColumnName = "vehicleId")
     private Vehicle vehicleId;
 
 
+ //   public Rider(User user) {
+   //     this.riderId = user;
+    //}
 }

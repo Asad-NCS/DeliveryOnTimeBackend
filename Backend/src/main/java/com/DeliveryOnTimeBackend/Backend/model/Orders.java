@@ -29,13 +29,19 @@ public class Orders {
     private ParcelStatus status;
     String placementDate;
     @ManyToOne
-    @JoinColumn(name = "customerID", referencedColumnName = "customerId")
+    @JoinColumn(name = "customerId", referencedColumnName = "customerId")
     private Customer customerId;
     @ManyToOne
     @JoinColumn(name = "paymentId", referencedColumnName = "paymentId")
     private Payment paymentId;
 
+    public Orders( ParcelStatus parcelStatus, String placementDate, Customer customerId) {
+        this.status = parcelStatus;
+        this.placementDate = placementDate;
+        this.customerId = customerId;
+
     }
+}
 
 
 

@@ -41,5 +41,12 @@ public class Parcel{
     private List<ParcelLog> logs;
 
 
+    public Parcel(String type, float weight, Location destination, Orders order, Location origin) {
+        this.type = type;
+        this.weight = weight;
+        this.destinationId = destination;
+        this.orderId = order;
+        this.originId = origin;
 
+    }
 }

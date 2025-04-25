@@ -1,8 +1,6 @@
 package com.DeliveryOnTimeBackend.Backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,13 +12,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
+@PrimaryKeyJoinColumn(name = "customerId")
 public class Customer extends User {
 
-    @OneToOne
+/*    @OneToOne
     @JoinColumn(name = "customerId", referencedColumnName = "userId")
     private User customerId;
+*/
+
 
     private String address;
-
+/*
+    public Customer(User user) {
+        this.customerId = user;
+    }
+*/
 }
 
