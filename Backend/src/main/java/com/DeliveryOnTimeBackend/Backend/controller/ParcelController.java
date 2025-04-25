@@ -5,11 +5,8 @@ package com.DeliveryOnTimeBackend.Backend.controller;
 
 import com.DeliveryOnTimeBackend.Backend.Responses.SendParcelResponse;
 import com.DeliveryOnTimeBackend.Backend.extras.ParcelStatus;
-import com.DeliveryOnTimeBackend.Backend.model.Customer;
-import com.DeliveryOnTimeBackend.Backend.model.Location;
-import com.DeliveryOnTimeBackend.Backend.model.Orders;
+import com.DeliveryOnTimeBackend.Backend.model.*;
 import com.DeliveryOnTimeBackend.Backend.repository.*;
-import com.DeliveryOnTimeBackend.Backend.model.Parcel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,10 +41,18 @@ public class ParcelController {
     @PostMapping("/addParcel")
     public ResponseEntity<?> addParcel(@RequestBody SendParcelResponse response){
 
-        Customer customerOptional= customerRepository.findByuserId(userRepository.findByuserId(response.getCustomerId()));
+      //  Customer customerOptional= customerRepository.findByuserId(userRepository.findByuserId(response.getCustomerId()));
+
+      //  User user = userRepository.findByuserId(response.getCustomerId());
+        Customer customer = customerRepository.findByuserId(response.getCustomerId());
+
+
+     //   Customer customerOptional= customerRepository.findByuserId(userRepository.findByuserId(response.getCustomerId()));
+        Customer customerOptional= customerRepository.findByuserId(response.getCustomerId());
+
 
         // still need to add the paymentId
-        Orders order = new Orders(ParcelStatus.WAITING,response.getPlacementDate(),customerOptional);
+        Orders order = new Orders(response.getStatus(),response.getPlacementDate(),customerOptional);
 
         Location destination = locationRepository.findByCityAndCountry(response.getDestinationCountry(),response.getDestinationCity());
         Location origin = locationRepository.findByCityAndCountry(response.getOriginCountry(), response.getOriginCity());

@@ -2,7 +2,9 @@ package com.DeliveryOnTimeBackend.Backend.controller;
 
 import com.DeliveryOnTimeBackend.Backend.Responses.RegisterVehicleResponse;
 import com.DeliveryOnTimeBackend.Backend.extras.VehicleStatus;
+import com.DeliveryOnTimeBackend.Backend.extras.VehicleType;
 import com.DeliveryOnTimeBackend.Backend.model.*;
+import com.DeliveryOnTimeBackend.Backend.repository.TruckRepository;
 import com.DeliveryOnTimeBackend.Backend.repository.VehicleRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +23,8 @@ public class RiderController {
     private RiderRepository riderRepository;
     @Autowired
     private VehicleRepository vehicleRepository;
+    @Autowired
+    private TruckRepository truckRepository;
 
     @GetMapping
     public List<Rider> getAllRiders() {
@@ -39,21 +43,43 @@ public class RiderController {
         Optional<Rider> riderOptional = riderRepository.findById(request.getRiderId());
 
         Vehicle vehicle;
-        VehicleStatus status;
 
-        switch (request.getVehicleType().toLowerCase()) {
-            case "truck":
-                vehicle = new Truck( request.getModel(), request.getLicenseNumber(), request.getStatus(), request.getTruckCapacity());
-                break;
-            case "ship":
-                vehicle = new Ship(request.getModel(), request.getLicenseNumber(), request.getStatus(), request.getCargoCapacity());
-                break;
-            case "airplane":
-                vehicle = new Airplane(request.getModel(), request.getLicenseNumber(), request.getStatus(), request.getMaxAltitude());
-                break;
-            default:
-                return ResponseEntity.badRequest().body("Invalid vehicle type");
+        if(request.getVehicleType() == VehicleType.TRUCK)
+            vehicle = new Truck( request.getModel(), request.getLicenseNumber(), request.getStatus(), request.getTruckCapacity());
+        else if(request.getVehicleType() == VehicleType.SHIP)
+            vehicle = new Ship(request.getModel(), request.getLicenseNumber(), request.getStatus(), request.getCargoCapacity());
+        else if(request.getVehicleType() == VehicleType.AIRPLANE)
+            vehicle = new Airplane(request.getModel(), request.getLicenseNumber(), request.getStatus(), request.getMaxAltitude());
+        else vehicle = new Truck();
+/*
+        if(request.getVehicleType() == VehicleType.TRUCK){
+            Truck truck = new Truck();
+            truck.setModel(request.getModel());
+            truck.setLicenseNumber(request.getLicenseNumber());
+            truck.setStatus(request.getStatus());
+
+            truckRepository.save(truck);
         }
+/*
+        if(user.getAccountType() == AccountType.Ship){
+            Ship ship = new Ship();
+            ship.setModel(user.getModel());
+            ship.setLicenseNumber(user.getLicenseNumber());
+            ship.setStatus(user.getVehicleStatus());
+
+            shipRepository.save(ship);
+        }
+
+        if(user.getAccountType() == AccountType.Airplane){
+            Airplane airplane = new Airplane();
+            airplane.setModel(user.getModel());
+            airplane.setLicenseNumber(user.getLicenseNumber());
+            airplane.setStatus(user.getVehicleStatus());
+
+            airplaneRepository.save(airplane);
+        }
+
+*/
 
         vehicle = vehicleRepository.save(vehicle);
 

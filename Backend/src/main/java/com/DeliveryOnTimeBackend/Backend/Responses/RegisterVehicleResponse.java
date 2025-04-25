@@ -2,6 +2,7 @@ package com.DeliveryOnTimeBackend.Backend.Responses;
 
 import com.DeliveryOnTimeBackend.Backend.extras.VehicleStatus;
 
+import com.DeliveryOnTimeBackend.Backend.extras.VehicleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class RegisterVehicleResponse {
 
     private Long riderId;
 
-    private String vehicleType; // "Truck", "Ship", "Airplane"
+    private VehicleType vehicleType; // "Truck", "Ship", "Airplane"
     private String model;
     private String licenseNumber;
 
@@ -29,7 +30,6 @@ public class RegisterVehicleResponse {
     private Double truckCapacity;
     private Double cargoCapacity;
     private Double maxAltitude;
-
 
 
 
