@@ -26,13 +26,20 @@ public class ParcelLog {
     @Enumerated(EnumType.STRING)
     private ParcelStatus status;
 
-    private String timestamp;
+    private String placementDate;
 
     @ManyToOne
     @JoinColumn(name = "locationId")
     private Location location;
 
+   //@ManyToOne
+   // @JoinColumn(name = "updatedByUserId")
+   // private User updatedBy;
+
     @ManyToOne
-    @JoinColumn(name = "updatedByUserId")
-    private User updatedBy;
+    @JoinColumn(name = "currentRider",referencedColumnName = "userId")
+    private Rider currentRider;
+    private String deliveredDate;
+
+
 }

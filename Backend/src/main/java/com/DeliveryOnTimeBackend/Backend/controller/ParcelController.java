@@ -28,6 +28,9 @@ public class ParcelController {
     OrdersRepository ordersRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ParcelLogRepository parcelLogRepository;
+
 
 
     @PostMapping
@@ -60,11 +63,34 @@ public class ParcelController {
 
         Parcel parcel = new Parcel(response.getType(),response.getWeight(),destination,order,origin);
 
+        ParcelLog parcelLog = new ParcelLog(null,parcel,ParcelStatus.WAITING,response.getPlacementDate(),origin,null,null);
         ordersRepository.save(order);
         parcelRepository.save(parcel);
+
+        parcelLogRepository.save(parcelLog);
 
 
         return ResponseEntity.ok("Order and Parcel Have been Added");
     }
 
 }
+/*  @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long logId;
+
+    @ManyToOne
+    @JoinColumn(name = "parcelId",referencedColumnName = "parcelId")
+    private Parcel parcelId;
+
+    @Enumerated(EnumType.STRING)
+    private ParcelStatus status;
+
+    private String timestamp;
+
+    @ManyToOne
+    @JoinColumn(name = "locationId")
+    private Location location;
+
+    @ManyToOne
+    @JoinColumn(name = "updatedByUserId")
+    private User updatedBy;*/
