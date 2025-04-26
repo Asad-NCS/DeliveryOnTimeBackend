@@ -24,8 +24,8 @@ public class ParcelController {
     CustomerRepository customerRepository;
     @Autowired
     LocationRepository locationRepository;
-    @Autowired
-    OrdersRepository ordersRepository;
+    //@Autowired
+    //OrdersRepository ordersRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired

@@ -2,7 +2,7 @@ package com.DeliveryOnTimeBackend.Backend.controller;
 
 
 import com.DeliveryOnTimeBackend.Backend.model.Orders;
-import com.DeliveryOnTimeBackend.Backend.repository.OrdersRepository;
+//import com.DeliveryOnTimeBackend.Backend.repository.OrdersRepository;
 import com.DeliveryOnTimeBackend.Backend.repository.ParcelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,20 +13,20 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 
-@RestController
-@RequestMapping("/api/orders")
+//@RestController
+//@RequestMapping("/api/orders")
 public class OrdersController {
 
 
-    @Autowired
-    OrdersRepository ordersRepository;
+ //   @Autowired
+ //   OrdersRepository ordersRepository;
 
-    @PostMapping("addOrder")
-    public Orders addorder(@RequestBody Orders order) {
-        System.out.println("Saving parcel: " + order);
-        return ordersRepository.save(order);
+   // @PostMapping("addOrder")
+    //public Orders addorder(@RequestBody Orders order) {
+      //  System.out.println("Saving parcel: " + order);
+        //return ordersRepository.save(order);
 
-    }
+    //}
 
   /*  @PostMapping("sendParcelId")
     public ResponseEntity<String> setParcelId(@RequestBody Map<String, Long> payload) {
