@@ -51,20 +51,20 @@ public class ParcelController {
 
 
      //   Customer customerOptional= customerRepository.findByuserId(userRepository.findByuserId(response.getCustomerId()));
-        Customer customerOptional= customerRepository.findByuserId(response.getCustomerId());
+      //  Customer customerOptional= customerRepository.findByuserId(response.getCustomerId());
 
 
         // still need to add the paymentId
-        Orders order = new Orders(response.getStatus(),response.getPlacementDate(),customerOptional);
+       // Orders order = new Orders(response.getStatus(),response.getPlacementDate(),customer);
 
         Location destination = locationRepository.findByCityAndCountry(response.getDestinationCountry(),response.getDestinationCity());
         Location origin = locationRepository.findByCityAndCountry(response.getOriginCountry(), response.getOriginCity());
 
 
-        Parcel parcel = new Parcel(response.getType(),response.getWeight(),destination,order,origin);
+        Parcel parcel = new Parcel(response.getType(),response.getWeight(),origin,destination,customer,null);
 
         ParcelLog parcelLog = new ParcelLog(null,parcel,ParcelStatus.WAITING,response.getPlacementDate(),origin,null,null);
-        ordersRepository.save(order);
+      //  ordersRepository.save(order);
         parcelRepository.save(parcel);
 
         parcelLogRepository.save(parcelLog);
