@@ -27,7 +27,9 @@ public class ParcelLogController {
     RiderRepository riderRepository;
 
     @GetMapping
-    public ParcelLog getparcellog(@RequestParam Long parcelID){return parcelLogRepository.findByparcelId(parcelRepository.findByparcelId(parcelID));}
+    public ParcelLog getparcellog(@RequestParam Long parcelID){
+        return parcelLogRepository.findByparcelId(parcelRepository.findByparcelId(parcelID));
+    }
 
     @PostMapping("/changeStatus")
     ResponseEntity<?> changeStatus (@RequestBody ChangeParcelPropertiesResponse changeParcelStatusResponse) {

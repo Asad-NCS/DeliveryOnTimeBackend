@@ -1,6 +1,9 @@
 package com.DeliveryOnTimeBackend.Backend.controller;
 
 
+import com.DeliveryOnTimeBackend.Backend.model.Parcel;
+import com.DeliveryOnTimeBackend.Backend.repository.ParcelLogRepository;
+import com.DeliveryOnTimeBackend.Backend.repository.ParcelRepository;
 import org.springframework.web.bind.annotation.RestController;
 import com.DeliveryOnTimeBackend.Backend.model.Payment;
 import com.DeliveryOnTimeBackend.Backend.repository.PaymentRepository;
@@ -14,6 +17,9 @@ public class PaymentController {
 
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    ParcelRepository parcelRepository;
+
 
     @GetMapping
     public List<Payment> getAllPayments() {
@@ -24,5 +30,16 @@ public class PaymentController {
     public Payment createPayment(@RequestBody Payment payment) {
         return paymentRepository.save(payment);
     }
+
+
+    @GetMapping("/getpaymentfromparcel")
+    public Payment getPaymentFromParcel(Long id){
+        Parcel parcel = parcelRepository.findByparcelId(id);
+
+        return paymentRepository.findByParcel(parcel);
+
+    }
+
+
 }
 

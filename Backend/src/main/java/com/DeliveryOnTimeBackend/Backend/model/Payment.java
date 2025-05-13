@@ -22,7 +22,7 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "parcel_id")
     private Parcel parcel;
 

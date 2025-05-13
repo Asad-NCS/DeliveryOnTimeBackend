@@ -40,9 +40,9 @@ public class Parcel{
     @ManyToOne
     @JoinColumn(name = "customerId", referencedColumnName = "userId")
     private Customer customerId;
-    @ManyToOne
-    @JoinColumn(name = "paymentId", referencedColumnName = "paymentId")
-    private Payment paymentId;
+   // @ManyToOne
+    //@JoinColumn(name = "paymentId", referencedColumnName = "paymentId")
+    //private Payment paymentId;
 
     @ManyToOne//added to link batch and parcel tables together witht he use of foriegn key
     @JoinColumn(name = "batch_id")
