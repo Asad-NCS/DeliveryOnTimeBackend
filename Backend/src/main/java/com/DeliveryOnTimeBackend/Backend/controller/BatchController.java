@@ -1,5 +1,6 @@
 package com.DeliveryOnTimeBackend.Backend.controller;
 
+import com.DeliveryOnTimeBackend.Backend.extras.BatchStatus;
 import com.DeliveryOnTimeBackend.Backend.model.Batch;
 import com.DeliveryOnTimeBackend.Backend.model.Location;
 import com.DeliveryOnTimeBackend.Backend.model.Rider;
@@ -8,7 +9,8 @@ import com.DeliveryOnTimeBackend.Backend.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/Batch")
@@ -30,18 +32,18 @@ public class BatchController {
             @RequestParam String city,
             @RequestParam String country) {
 
-        Optional<Location> locationOpt = locationRepository.findByCityAndCountry(city, country);
+        Optional<Location> locationOpt = Optional.ofNullable(locationRepository.findByCityAndCountry(city, country));
 
         if (locationOpt.isPresent()) {
             return batchRepository.findByCurrentLocation(locationOpt.get());
         }
-        return List.of(); // Return empty list if location not found
+        return List.of();
     }
 
     @PostMapping
     public Batch createBatch(@RequestBody Batch batch) {
         if (batch.getStatus() == null) {
-            batch.setStatus(Batch.BatchStatus.PENDING);
+            batch.setStatus(BatchStatus.Pending);  // Changed from Batch.BatchStatus.PENDING
         }
         return batchRepository.save(batch);
     }
@@ -52,10 +54,10 @@ public class BatchController {
                 .orElseThrow(() -> new RuntimeException("Batch not found"));
 
         Rider rider = new Rider();
-        rider.setUserId(req.getRiderId()); // Assuming User class has userId
+        rider.setUserId(req.getRiderId());
 
         batch.setRider(rider);
-        batch.setStatus(Batch.BatchStatus.READY);
+        batch.setStatus(BatchStatus.Ready);  // Changed from Batch.BatchStatus.READY
 
         return batchRepository.save(batch);
     }
@@ -80,5 +82,4 @@ public class BatchController {
             this.riderId = riderId;
         }
     }
-
 }

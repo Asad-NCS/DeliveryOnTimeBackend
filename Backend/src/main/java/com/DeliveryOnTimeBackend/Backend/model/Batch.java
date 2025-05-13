@@ -1,14 +1,11 @@
 package com.DeliveryOnTimeBackend.Backend.model;
 
 import com.DeliveryOnTimeBackend.Backend.extras.BatchStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -27,6 +24,10 @@ public class Batch {
     @JoinColumn(name = "destination_id", referencedColumnName = "locationId")
     private Location destination;
 
+    @ManyToOne
+    @JoinColumn(name = "current_location_id", referencedColumnName = "locationId")
+    private Location currentLocation;
+
     @OneToMany(mappedBy = "batch")
     private List<Parcel> parcels;
 
@@ -37,6 +38,5 @@ public class Batch {
     @JoinColumn(name = "rider_id")
     private Rider rider;
 
-    private Integer maxParcels = 10; // is the default batch size limit
-
+    private Integer maxParcels = 10;
 }
