@@ -65,7 +65,7 @@ public class Parcel{
         this.weight = weight;
         this.destinationId = destination;
         this.customerId = customer;
-        this.address = address;
+
         this.originId = origin;
     }
 }
