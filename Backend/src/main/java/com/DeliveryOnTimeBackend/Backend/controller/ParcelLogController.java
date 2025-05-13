@@ -11,10 +11,9 @@ import com.DeliveryOnTimeBackend.Backend.repository.ParcelRepository;
 import com.DeliveryOnTimeBackend.Backend.repository.RiderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/parcelLog")
@@ -26,6 +25,9 @@ public class ParcelLogController {
     ParcelLogRepository parcelLogRepository;
     @Autowired
     RiderRepository riderRepository;
+
+    @GetMapping
+    public ParcelLog getparcellog(@RequestParam Long parcelID){return parcelLogRepository.findByparcelId(parcelRepository.findByparcelId(parcelID));}
 
     @PostMapping("/changeStatus")
     ResponseEntity<?> changeStatus (@RequestBody ChangeParcelPropertiesResponse changeParcelStatusResponse) {
