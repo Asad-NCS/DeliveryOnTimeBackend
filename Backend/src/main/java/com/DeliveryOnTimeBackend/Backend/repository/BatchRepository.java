@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.DeliveryOnTimeBackend.Backend.model.Batch;
 
-import java.util.List;
+import java.util.*;
 
 
 @Repository
