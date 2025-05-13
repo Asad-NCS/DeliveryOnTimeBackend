@@ -45,10 +45,6 @@ public class Parcel{
     @ManyToOne
     @JoinColumn(name = "paymentId", referencedColumnName = "paymentId")
     private Payment paymentId;
-
-    @ManyToOne//added to link batch and parcel tables together witht he use of foriegn key
-    @JoinColumn(name = "batch_id")
-    private Batch batch;
 /*
     public Parcel(String type, float weight, Location destination, Orders order, Location origin) {
         this.type = type;

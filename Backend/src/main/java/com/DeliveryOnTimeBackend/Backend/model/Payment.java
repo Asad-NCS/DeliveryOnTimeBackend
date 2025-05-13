@@ -1,5 +1,6 @@
 package com.DeliveryOnTimeBackend.Backend.model;
 
+import com.DeliveryOnTimeBackend.Backend.extras.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,11 +22,8 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-     @ManyToOne
-     @JoinColumn(name = "parcel_id")
-     private Parcel parcel;
+    @OneToOne
+    @JoinColumn(name = "parcel_id")
+    private Parcel parcel;
 
-    public enum PaymentStatus {
-        Paid, Pending, PartiallyPaid
-    }
 }

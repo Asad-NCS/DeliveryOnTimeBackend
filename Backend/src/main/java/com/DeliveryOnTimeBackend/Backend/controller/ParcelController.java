@@ -5,14 +5,12 @@ package com.DeliveryOnTimeBackend.Backend.controller;
 
 import com.DeliveryOnTimeBackend.Backend.Responses.SendParcelResponse;
 import com.DeliveryOnTimeBackend.Backend.extras.ParcelStatus;
+import com.DeliveryOnTimeBackend.Backend.extras.PaymentStatus;
 import com.DeliveryOnTimeBackend.Backend.model.*;
 import com.DeliveryOnTimeBackend.Backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/parcel")
@@ -30,7 +28,10 @@ public class ParcelController {
     UserRepository userRepository;
     @Autowired
     ParcelLogRepository parcelLogRepository;
-
+    @Autowired
+    RouteRepository routeRepository;
+    @Autowired
+    PaymentRepository paymentRepository;
 
 
     @PostMapping
@@ -39,6 +40,7 @@ public class ParcelController {
         return parcelRepository.save(parcel);
 
     }
+
 
 
     @PostMapping("/addParcel")
@@ -57,9 +59,15 @@ public class ParcelController {
         // still need to add the paymentId
        // Orders order = new Orders(response.getStatus(),response.getPlacementDate(),customer);
 
-        Location destination = locationRepository.findByCityAndCountry(response.getDestinationCountry(),response.getDestinationCity());
-        Location origin = locationRepository.findByCityAndCountry(response.getOriginCountry(), response.getOriginCity());
 
+
+        Location destination = locationRepository.findFirstByCityAndCountry(response.getDestinationCity(),response.getDestinationCountry());
+        Location origin = locationRepository.findFirstByCityAndCountry(response.getOriginCity(),response.getOriginCountry());
+        System.out.println(response.getDestinationCountry() + " " + response.getDestinationCity());
+        System.out.println(response.getOriginCountry() +" "+ response.getOriginCity());
+
+        System.out.println(destination);
+        System.out.println(origin);
 
         Parcel parcel = new Parcel(response.getType(),response.getWeight(),origin,destination,customer,null);
 
@@ -69,8 +77,19 @@ public class ParcelController {
 
         parcelLogRepository.save(parcelLog);
 
+        Route route = routeRepository.findByDestinationIdAndOriginId(destination,origin);
+        System.out.println(route);
 
-        return ResponseEntity.ok("Order and Parcel Have been Added");
+        float amount = route.getBasePayment() * parcel.getWeight();
+
+        Payment payment = new Payment(null, amount,null, PaymentStatus.Pending,parcel);
+
+        paymentRepository.save(payment);
+
+     //   float amount = parcel.getWeight() * route.getBasePayment();
+
+
+        return ResponseEntity.ok("Parcel, Parcel_log, Payment Have been Added");
     }
 
 }

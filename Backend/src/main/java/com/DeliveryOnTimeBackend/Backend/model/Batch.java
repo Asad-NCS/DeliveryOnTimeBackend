@@ -1,12 +1,16 @@
 package com.DeliveryOnTimeBackend.Backend.model;
 
+import com.DeliveryOnTimeBackend.Backend.extras.BatchStatus;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.*;
 
-import java.util.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,10 +27,6 @@ public class Batch {
     @JoinColumn(name = "destination_id", referencedColumnName = "locationId")
     private Location destination;
 
-    @ManyToOne
-    @JoinColumn(name = "current_location_id", referencedColumnName = "locationId")
-    private Location currentLocation;  // Added current location
-
     @OneToMany(mappedBy = "batch")
     private List<Parcel> parcels;
 
@@ -37,14 +37,6 @@ public class Batch {
     @JoinColumn(name = "rider_id")
     private Rider rider;
 
-    private Integer maxParcels = 10; // default batch size limit
+    private Integer maxParcels = 10; // is the default batch size limit
 
-    public enum BatchStatus {
-        PENDING, READY, IN_TRANSIT, DELIVERED
-    }
-
-    // Helper method to check if batch has capacity
-    public boolean hasCapacity() {
-        return parcels == null || parcels.size() < maxParcels;
-    }
 }

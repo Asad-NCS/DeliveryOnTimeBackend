@@ -106,6 +106,9 @@ public User addUser(@RequestBody User user){
         return ResponseEntity.ok(true);
     }
 
-
+    @GetMapping("/getuserfromemail")
+    public Optional<User> getUserFromEmail(@RequestParam String email){
+        return userRepository.findByEmail(email);
+    }
 
 }
