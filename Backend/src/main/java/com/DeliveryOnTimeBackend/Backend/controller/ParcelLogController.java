@@ -2,18 +2,11 @@ package com.DeliveryOnTimeBackend.Backend.controller;
 
 
 import com.DeliveryOnTimeBackend.Backend.Responses.ChangeParcelPropertiesResponse;
-import com.DeliveryOnTimeBackend.Backend.model.Parcel;
-import com.DeliveryOnTimeBackend.Backend.model.ParcelLog;
-import com.DeliveryOnTimeBackend.Backend.model.Rider;
-import com.DeliveryOnTimeBackend.Backend.model.User;
-import com.DeliveryOnTimeBackend.Backend.repository.ParcelLogRepository;
-import com.DeliveryOnTimeBackend.Backend.repository.ParcelRepository;
-import com.DeliveryOnTimeBackend.Backend.repository.RiderRepository;
+import com.DeliveryOnTimeBackend.Backend.model.*;
+import com.DeliveryOnTimeBackend.Backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/parcelLog")
@@ -25,10 +18,16 @@ public class ParcelLogController {
     ParcelLogRepository parcelLogRepository;
     @Autowired
     RiderRepository riderRepository;
+    @Autowired
+    RouteRepository routeRepository;
+    @Autowired
+    LocationRepository locationRepository;
+
+
 
     @GetMapping
     public ParcelLog getparcellog(@RequestParam Long parcelID){
-        return parcelLogRepository.findByparcelId(parcelRepository.findByparcelId(parcelID));
+        return parcelLogRepository.findByParcelId(parcelRepository.findByparcelId(parcelID));
     }
 
     @PostMapping("/changeStatus")
@@ -38,7 +37,7 @@ public class ParcelLogController {
         Parcel parcel = parcelRepository.findByparcelId(changeParcelStatusResponse.getParcelId());
 
 
-        ParcelLog parcelLog = parcelLogRepository.findByparcelId(parcel);
+        ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
 
 
         parcelLog.setStatus(changeParcelStatusResponse.getStatus());
@@ -53,13 +52,37 @@ public class ParcelLogController {
     ResponseEntity<?> changeLocation (@RequestBody ChangeParcelPropertiesResponse changeParcelLocationResponse) {
 
 
+/*        private Long parcelId;
+        private ParcelStatus status;
+        Location location;
+        private Long riderId;
+        private String deliveredDate;
+*/
+
         Parcel parcel = parcelRepository.findByparcelId(changeParcelLocationResponse.getParcelId());
 
 
-        ParcelLog parcelLog = parcelLogRepository.findByparcelId(parcel);
+        ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
 
+        Rider currentRider = parcelLog.getCurrentRider();
 
-        parcelLog.setLocation(changeParcelLocationResponse.getLocation());
+        Location newLocation = locationRepository.findFirstByCity(changeParcelLocationResponse.getLocation());
+        System.out.println(newLocation);
+          Location oldLocation = parcelLog.getLocation();
+        // Location newLocation = changeParcelLocationResponse.getLocation();
+
+        System.out.println(newLocation.getCity());
+        System.out.println(oldLocation.getCity());
+
+        float parcelWeight = parcel.getWeight();
+
+        Route routeFollowed = routeRepository.findByDestinationAndOrigin(newLocation,oldLocation);
+
+        float riderPayment = (float) (routeFollowed.getBasePayment()*parcelWeight*0.15);
+
+        currentRider.setDueAmount(currentRider.getDueAmount() + riderPayment);
+
+        parcelLog.setLocation(newLocation);
 
 
         parcelLogRepository.save(parcelLog);
@@ -74,7 +97,7 @@ public class ParcelLogController {
         Parcel parcel = parcelRepository.findByparcelId(changeCurrentRiderResponse.getParcelId());
         System.out.println(parcel.getParcelId());
 
-        ParcelLog parcelLog = parcelLogRepository.findByparcelId(parcel);
+        ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
         System.out.println(parcelLog.getLogId());
         System.out.println(parcelLog.getCurrentRider());
         Rider rider = riderRepository.findByUserId(changeCurrentRiderResponse.getRiderId());
@@ -93,7 +116,7 @@ public class ParcelLogController {
 
         System.out.println(parcel.getParcelId());
 
-        ParcelLog parcelLog = parcelLogRepository.findByparcelId(parcel);
+        ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
         System.out.println(parcelLog.getLogId());
 
         System.out.println(parcelLog.getDeliveredDate());

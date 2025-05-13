@@ -35,6 +35,8 @@ public class Parcel{
     @JoinColumn(name = "destinationId", referencedColumnName = "locationId")
     private Location destinationId;
 
+    String address;
+
     // @OneToMany(mappedBy = "parcelId", cascade = CascadeType.ALL)
     //private List<ParcelLog> logs;
     @ManyToOne
@@ -57,13 +59,13 @@ public class Parcel{
 
         }
     */
-    public Parcel(String type, float weight, Location origin, Location destination, Customer customer, Object o) {
+    public Parcel(String type, float weight, Location origin, Location destination, Customer customer, Object o,String address) {
 
         this.type = type;
         this.weight = weight;
         this.destinationId = destination;
         this.customerId = customer;
-
+        this.address = address;
         this.originId = origin;
     }
 }

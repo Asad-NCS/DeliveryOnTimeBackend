@@ -2,9 +2,12 @@
 
 package com.DeliveryOnTimeBackend.Backend.controller;
 
+import com.DeliveryOnTimeBackend.Backend.Responses.ChangeDueAmountResponse;
 import com.DeliveryOnTimeBackend.Backend.extras.AccountType;
+import com.DeliveryOnTimeBackend.Backend.model.Admin;
 import com.DeliveryOnTimeBackend.Backend.model.Customer;
 import com.DeliveryOnTimeBackend.Backend.model.Rider;
+import com.DeliveryOnTimeBackend.Backend.repository.AdminRepository;
 import com.DeliveryOnTimeBackend.Backend.repository.CustomerRepository;
 import com.DeliveryOnTimeBackend.Backend.repository.RiderRepository;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +32,26 @@ public class UserController {
     RiderRepository riderRepository;
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    AdminRepository adminRepository;
+
+
+
 
 @GetMapping
 public List<User> getAllUsers(){
     return userRepository.findAll();
 }
+
+
+@PostMapping("/changeDueAmount")
+public ResponseEntity<?> changeDueAmount(@RequestBody ChangeDueAmountResponse changeDueAmountResponse){
+    Rider rider = riderRepository.findByUserId(changeDueAmountResponse.getRiderId());
+    rider.setDueAmount(changeDueAmountResponse.getAmount());
+
+    return ResponseEntity.ok("Amount Has been Changed");
+}
+
 
 @PostMapping("/addUser")
 public User addUser(@RequestBody User user){
@@ -54,6 +72,8 @@ public User addUser(@RequestBody User user){
         rider.setPhone(user.getPhone());
         rider.setPassword(user.getPassword());
         rider.setAccountType(user.getAccountType());
+        rider.setDueAmount(0);
+        rider.setAccoundNo(111);
 
         riderRepository.save(rider);
     }
@@ -63,9 +83,23 @@ public User addUser(@RequestBody User user){
            customer.setEmail(user.getEmail());
            customer.setPhone(user.getPhone());
            customer.setPassword(user.getPassword());
-           customer.setAccountType(user.getAccountType());
+           customer.setAccountType(user.getAccountType()
+           );
 
            customerRepository.save(customer);
+       }
+
+
+       if(user.getAccountType() == AccountType.Admin){
+           Admin customer = new Admin();
+           customer.setName(user.getName());
+           customer.setEmail(user.getEmail());
+           customer.setPhone(user.getPhone());
+           customer.setPassword(user.getPassword());
+           customer.setAccountType(user.getAccountType()
+           );
+
+           adminRepository.save(customer);
        }
 
 

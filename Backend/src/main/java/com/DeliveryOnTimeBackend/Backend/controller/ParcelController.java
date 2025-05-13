@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/parcel")
 public class ParcelController {
@@ -69,7 +71,7 @@ public class ParcelController {
         System.out.println(destination);
         System.out.println(origin);
 
-        Parcel parcel = new Parcel(response.getType(),response.getWeight(),origin,destination,customer,null);
+        Parcel parcel = new Parcel(response.getType(),response.getWeight(),origin,destination,customer,null,response.getAddress());
 
         ParcelLog parcelLog = new ParcelLog(null,parcel,ParcelStatus.WAITING,response.getPlacementDate(),origin,null,null);
       //  ordersRepository.save(order);
@@ -77,7 +79,11 @@ public class ParcelController {
 
         parcelLogRepository.save(parcelLog);
 
-        Route route = routeRepository.findByDestinationIdAndOriginId(destination,origin);
+                Route route = Optional.ofNullable(routeRepository.findByDestinationAndOrigin(destination, origin))
+                .orElseThrow(() -> new RuntimeException("No route found from origin to destination"));
+
+
+      //  Route route = routeRepository.findByDestinationAndOrigin(destination,origin);
         System.out.println(route);
 
         float amount = route.getBasePayment() * parcel.getWeight();

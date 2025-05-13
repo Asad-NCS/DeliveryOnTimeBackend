@@ -24,10 +24,10 @@ public class Route {
 
     @ManyToOne
     @JoinColumn(name = "origin_id")
-    private Location originId;
+    private Location origin;
     @ManyToOne
     @JoinColumn(name = "destination_id")
-    private Location destinationId;
+    private Location destination;
 
     private float basePayment;
 

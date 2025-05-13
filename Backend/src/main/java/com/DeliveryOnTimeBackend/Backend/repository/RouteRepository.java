@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface RouteRepository extends JpaRepository<Route,Long> {
 
 
-         Route findByDestinationIdAndOriginId(Location destinationId, Location originId);
+         Route findByDestinationAndOrigin(Location destination, Location origin);
 
 
 }

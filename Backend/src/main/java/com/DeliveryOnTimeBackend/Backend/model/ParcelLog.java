@@ -19,7 +19,7 @@ public class ParcelLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long logId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "parcelId",referencedColumnName = "parcelId")
     private Parcel parcelId;
 

@@ -25,7 +25,7 @@ public class SendParcelResponse {
     private long paymentId;
     private String type;
     private float weight;
-
+    private String address;
 
 
 }
