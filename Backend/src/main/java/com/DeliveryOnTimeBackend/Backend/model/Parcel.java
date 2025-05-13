@@ -1,5 +1,3 @@
-
-
 package com.DeliveryOnTimeBackend.Backend.model;
 
 import com.DeliveryOnTimeBackend.Backend.extras.ParcelStatus;
@@ -27,7 +25,7 @@ public class Parcel{
 
     private String type;
     private float weight;
-   // @OneToOne
+    // @OneToOne
     //@JoinColumn(name = "orderId", referencedColumnName = "orderId")
     //private Orders orderId;
     @ManyToOne
@@ -37,7 +35,7 @@ public class Parcel{
     @JoinColumn(name = "destinationId", referencedColumnName = "locationId")
     private Location destinationId;
 
-   // @OneToMany(mappedBy = "parcelId", cascade = CascadeType.ALL)
+    // @OneToMany(mappedBy = "parcelId", cascade = CascadeType.ALL)
     //private List<ParcelLog> logs;
     @ManyToOne
     @JoinColumn(name = "customerId", referencedColumnName = "userId")
@@ -45,16 +43,20 @@ public class Parcel{
     @ManyToOne
     @JoinColumn(name = "paymentId", referencedColumnName = "paymentId")
     private Payment paymentId;
-/*
-    public Parcel(String type, float weight, Location destination, Orders order, Location origin) {
-        this.type = type;
-        this.weight = weight;
-        this.destinationId = destination;
-      //  this.orderId = order;
-        this.originId = origin;
 
-    }
-*/
+    @ManyToOne//added to link batch and parcel tables together witht he use of foriegn key
+    @JoinColumn(name = "batch_id")
+    private Batch batch;
+    /*
+        public Parcel(String type, float weight, Location destination, Orders order, Location origin) {
+            this.type = type;
+            this.weight = weight;
+            this.destinationId = destination;
+          //  this.orderId = order;
+            this.originId = origin;
+
+        }
+    */
     public Parcel(String type, float weight, Location origin, Location destination, Customer customer, Object o) {
 
         this.type = type;
