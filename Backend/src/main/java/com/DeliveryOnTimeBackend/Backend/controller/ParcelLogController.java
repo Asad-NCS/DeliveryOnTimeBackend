@@ -48,7 +48,7 @@ try {
 }
     }
 
-
+/*
     @PostMapping("/changeLocation")
     ResponseEntity<?> changeLocation (@RequestBody ChangeParcelPropertiesResponse changeParcelLocationResponse) {
 
@@ -90,7 +90,7 @@ try {
     throw new RuntimeException(e);
 }
     }
-
+    */
   /*  @PostMapping("/changeCurrentRider")
     ResponseEntity<?> changeCurrentRider (@RequestBody ChangeParcelPropertiesResponse changeCurrentRiderResponse) {
 

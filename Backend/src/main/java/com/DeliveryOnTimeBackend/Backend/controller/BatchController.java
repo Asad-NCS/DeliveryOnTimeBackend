@@ -7,6 +7,7 @@ import com.DeliveryOnTimeBackend.Backend.model.*;
 import com.DeliveryOnTimeBackend.Backend.repository.BatchRepository;
 import com.DeliveryOnTimeBackend.Backend.repository.LocationRepository;
 import com.DeliveryOnTimeBackend.Backend.repository.RiderRepository;
+import com.DeliveryOnTimeBackend.Backend.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,23 @@ public class BatchController {
     @Autowired
     private RiderRepository riderRepository;
 
-    @PostMapping("/changeCurrentRider")
+    @Autowired
+    private RouteRepository routeRepository;
+
+    // rider should also be able to change the status of a batch to delievered
+
+    // when the rider drops a batch in a city
+    @PostMapping("/dropBatch")
+    ResponseEntity<?> dropBatch (@RequestParam long batchId) {
+        Batch batch = batchRepository.findByBatchId(batchId);
+        batch.setRider(null);
+        batch.setStatus(BatchStatus.Pending);
+        return ResponseEntity.ok("Dropped");
+    }
+
+
+    // to change the current rider attribute whenervt a rider picks up a batch
+        @PostMapping("/changeCurrentRider")
     ResponseEntity<?> changeCurrentRider (@RequestBody ChangeBatchProperties changeBatchProperties) {
 
 
@@ -36,9 +53,10 @@ public class BatchController {
 
         Batch batch = batchRepository.findByBatchId( changeBatchProperties.getBatchId());
         Rider rider = riderRepository.findByUserId(changeBatchProperties.getRiderId());
+        batch.setRider(rider);
 
 
-     //   ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
+        // ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
        // System.out.println(parcelLog.getLogId());
         //System.out.println(parcelLog.getCurrentRider());
         //Rider rider = riderRepository.findByUserId(changeCurrentRiderResponse.getRiderId());
@@ -52,7 +70,55 @@ public class BatchController {
     }
 
 
+    // when a rider changes the location of a batch,
+    // this will generate the due amount od the rider as well
+    @PostMapping("/changeLocation")
+    ResponseEntity<?> changeLocation (@RequestBody ChangeBatchProperties changeBatchLocation) {
 
+
+        try {
+         //   Parcel parcel = parcelRepository.findByparcelId(changeParcelLocationResponse.getParcelId());
+
+
+//            ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
+
+            Batch batch = batchRepository.findByBatchId(changeBatchLocation.getBatchId());
+            //Batch batch = parcel.getBatch();
+            Rider currentRider = batch.getRider();
+
+            //Rider currentRider = parcelLog.getCurrentRider();
+
+            Location newLocation = locationRepository.findFirstByCity(changeBatchLocation.getLocation());
+            System.out.println(newLocation);
+            Location oldLocation = batch.getCurrentLocation();
+            // Location newLocation = changeParcelLocationResponse.getLocation();
+
+            System.out.println(newLocation.getCity());
+            System.out.println(oldLocation.getCity());
+
+            //float parcelWeight = parcel.getWeight();
+            float batchWeight = batch.getWeight();
+
+            Route routeFollowed = routeRepository.findByDestinationAndOrigin(newLocation, oldLocation);
+
+            float riderPayment = (float) (routeFollowed.getBasePayment() * batchWeight * 0.03);
+
+            currentRider.setDueAmount(currentRider.getDueAmount() + riderPayment);
+
+            batch.setCurrentLocation(newLocation);
+
+
+           // parcelLogRepository.save(parcelLog);
+            batchRepository.save(batch);
+            riderRepository.save(currentRider);
+
+
+            return ResponseEntity.ok("Status Changes Successfully");
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 

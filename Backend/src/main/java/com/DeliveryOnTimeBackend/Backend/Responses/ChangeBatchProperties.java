@@ -11,6 +11,7 @@ public class ChangeBatchProperties {
 
     long batchId;
     long riderId;
+    String location;
 
 
 
