@@ -1,12 +1,14 @@
 package com.DeliveryOnTimeBackend.Backend.controller;
 
+import com.DeliveryOnTimeBackend.Backend.Responses.ChangeBatchProperties;
+import com.DeliveryOnTimeBackend.Backend.Responses.ChangeParcelPropertiesResponse;
 import com.DeliveryOnTimeBackend.Backend.extras.BatchStatus;
-import com.DeliveryOnTimeBackend.Backend.model.Batch;
-import com.DeliveryOnTimeBackend.Backend.model.Location;
-import com.DeliveryOnTimeBackend.Backend.model.Rider;
+import com.DeliveryOnTimeBackend.Backend.model.*;
 import com.DeliveryOnTimeBackend.Backend.repository.BatchRepository;
 import com.DeliveryOnTimeBackend.Backend.repository.LocationRepository;
+import com.DeliveryOnTimeBackend.Backend.repository.RiderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +24,40 @@ public class BatchController {
     @Autowired
     private LocationRepository locationRepository;
 
+    @Autowired
+    private RiderRepository riderRepository;
+
+    @PostMapping("/changeCurrentRider")
+    ResponseEntity<?> changeCurrentRider (@RequestBody ChangeBatchProperties changeBatchProperties) {
+
+
+    //    Parcel parcel = parcelRepository.findByparcelId(changeCurrentRiderResponse.getParcelId());
+    //    System.out.println(parcel.getParcelId());
+
+        Batch batch = batchRepository.findByBatchId( changeBatchProperties.getBatchId());
+        Rider rider = riderRepository.findByUserId(changeBatchProperties.getRiderId());
+
+
+     //   ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
+       // System.out.println(parcelLog.getLogId());
+        //System.out.println(parcelLog.getCurrentRider());
+        //Rider rider = riderRepository.findByUserId(changeCurrentRiderResponse.getRiderId());
+        //parcelLog.setCurrentRider(rider);
+        //System.out.println(parcelLog.getCurrentRider());
+        //parcelLogRepository.save(parcelLog);
+        batchRepository.save(batch);
+
+        return ResponseEntity.ok("Status Changes Successfully");
+
+    }
+
+
+
+
+
+
+
+
     @GetMapping
     public List<Batch> getAllBatches() {
         return batchRepository.findAll();
@@ -32,7 +68,7 @@ public class BatchController {
             @RequestParam String city,
             @RequestParam String country) {
 
-        Optional<Location> locationOpt = Optional.ofNullable(locationRepository.findByCityAndCountry(city, country));
+        Optional<Optional<Location>> locationOpt = Optional.ofNullable(locationRepository.findByCityAndCountry(city, country));
 
         if (locationOpt.isPresent()) {
             return batchRepository.findByCurrentLocation(locationOpt.get());

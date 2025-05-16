@@ -4,6 +4,7 @@ package com.DeliveryOnTimeBackend.Backend.controller;
 
 
 import com.DeliveryOnTimeBackend.Backend.Responses.SendParcelResponse;
+import com.DeliveryOnTimeBackend.Backend.extras.BatchStatus;
 import com.DeliveryOnTimeBackend.Backend.extras.ParcelStatus;
 import com.DeliveryOnTimeBackend.Backend.extras.PaymentStatus;
 import com.DeliveryOnTimeBackend.Backend.model.*;
@@ -24,8 +25,6 @@ public class ParcelController {
     CustomerRepository customerRepository;
     @Autowired
     LocationRepository locationRepository;
-    //@Autowired
-    //OrdersRepository ordersRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -34,6 +33,8 @@ public class ParcelController {
     RouteRepository routeRepository;
     @Autowired
     PaymentRepository paymentRepository;
+    @Autowired
+    BatchRepository batchRepository;
 
 
     @PostMapping
@@ -48,55 +49,68 @@ public class ParcelController {
     @PostMapping("/addParcel")
     public ResponseEntity<?> addParcel(@RequestBody SendParcelResponse response){
 
-      //  Customer customerOptional= customerRepository.findByuserId(userRepository.findByuserId(response.getCustomerId()));
+    try {    // 6 different tables
 
-      //  User user = userRepository.findByuserId(response.getCustomerId());
+
         Customer customer = customerRepository.findByuserId(response.getCustomerId());
 
 
-     //   Customer customerOptional= customerRepository.findByuserId(userRepository.findByuserId(response.getCustomerId()));
-      //  Customer customerOptional= customerRepository.findByuserId(response.getCustomerId());
+
+        Location destination = locationRepository.findFirstByCityAndCountry(response.getDestinationCity(), response.getDestinationCountry());
+        Location origin = locationRepository.findFirstByCityAndCountry(response.getOriginCity(), response.getOriginCountry());
+
+        // System.out.println(response.getDestinationCountry() + " " + response.getDestinationCity());
+        //System.out.println(response.getOriginCountry() + " " + response.getOriginCity());
+
+        //System.out.println(destination);
+        //System.out.println(origin);
+
+        Batch batch = batchRepository.findByCurrentLocationAndDestinationAndStatusAndWeightLessThan(origin,destination,BatchStatus.Pending,100);
 
 
-        // still need to add the paymentId
-       // Orders order = new Orders(response.getStatus(),response.getPlacementDate(),customer);
+        if(batch == null || batch.getWeight() + response.getWeight() > 100){
+             batch = new Batch(null,response.getWeight(),destination,origin, BatchStatus.Pending,null);
+            batchRepository.save(batch);
+
+
+        }
+        else {
+            batch.setWeight(batch.getWeight() + response.getWeight());
+            if(batch.getWeight() > 80)
+                batch.setStatus(BatchStatus.Ready);
+            batchRepository.save(batch);
+        }
 
 
 
-        Location destination = locationRepository.findFirstByCityAndCountry(response.getDestinationCity(),response.getDestinationCountry());
-        Location origin = locationRepository.findFirstByCityAndCountry(response.getOriginCity(),response.getOriginCountry());
-        System.out.println(response.getDestinationCountry() + " " + response.getDestinationCity());
-        System.out.println(response.getOriginCountry() +" "+ response.getOriginCity());
+        Parcel parcel = new Parcel(response.getType(), response.getWeight(), origin, destination, customer, null, response.getAddress(),response.getSendAddress(),batch);
 
-        System.out.println(destination);
-        System.out.println(origin);
-
-        Parcel parcel = new Parcel(response.getType(),response.getWeight(),origin,destination,customer,null,response.getAddress());
-
-        ParcelLog parcelLog = new ParcelLog(null,parcel,ParcelStatus.WAITING,response.getPlacementDate(),origin,null,null);
-      //  ordersRepository.save(order);
+        ParcelLog parcelLog = new ParcelLog(null, parcel, ParcelStatus.WAITING, response.getPlacementDate(), origin, null);
+        //  ordersRepository.save(order);
         parcelRepository.save(parcel);
 
         parcelLogRepository.save(parcelLog);
 
-                Route route = Optional.ofNullable(routeRepository.findByDestinationAndOrigin(destination, origin))
+        Route route = Optional.ofNullable(routeRepository.findByDestinationAndOrigin(destination, origin))
                 .orElseThrow(() -> new RuntimeException("No route found from origin to destination"));
 
 
-      //  Route route = routeRepository.findByDestinationAndOrigin(destination,origin);
+        //  Route route = routeRepository.findByDestinationAndOrigin(destination,origin);
         System.out.println(route);
 
         float amount = route.getBasePayment() * parcel.getWeight();
 
-        Payment payment = new Payment(null, amount,null, PaymentStatus.Pending,parcel);
+        Payment payment = new Payment(null, amount, null, PaymentStatus.Pending, parcel);
 
         paymentRepository.save(payment);
 
-     //   float amount = parcel.getWeight() * route.getBasePayment();
+        //   float amount = parcel.getWeight() * route.getBasePayment();
 
 
         return ResponseEntity.ok("Parcel, Parcel_log, Payment Have been Added");
-    }
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }}
 
 }
 /*  @Id

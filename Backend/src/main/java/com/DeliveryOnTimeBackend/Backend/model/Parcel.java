@@ -36,6 +36,7 @@ public class Parcel{
     private Location destinationId;
 
     String address;
+    String sendAddress;
 
     // @OneToMany(mappedBy = "parcelId", cascade = CascadeType.ALL)
     //private List<ParcelLog> logs;
@@ -59,13 +60,15 @@ public class Parcel{
 
         }
     */
-    public Parcel(String type, float weight, Location origin, Location destination, Customer customer, Object o,String address) {
+    public Parcel(String type, float weight, Location origin, Location destination, Customer customer, Object o,String address,String sendAddress,Batch batch) {
 
         this.type = type;
         this.weight = weight;
         this.destinationId = destination;
         this.customerId = customer;
-
+        this.address = address;
         this.originId = origin;
+        this.sendAddress = sendAddress;
+        this.batch = batch;
     }
 }

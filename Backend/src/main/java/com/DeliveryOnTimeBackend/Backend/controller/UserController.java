@@ -49,6 +49,8 @@ public ResponseEntity<?> changeDueAmount(@RequestBody ChangeDueAmountResponse ch
     Rider rider = riderRepository.findByUserId(changeDueAmountResponse.getRiderId());
     rider.setDueAmount(changeDueAmountResponse.getAmount());
 
+    riderRepository.save(rider);
+
     return ResponseEntity.ok("Amount Has been Changed");
 }
 

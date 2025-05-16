@@ -24,7 +24,6 @@ public class ParcelLogController {
     LocationRepository locationRepository;
 
 
-
     @GetMapping
     public ParcelLog getparcellog(@RequestParam Long parcelID){
         return parcelLogRepository.findByParcelId(parcelRepository.findByparcelId(parcelID));
@@ -33,18 +32,20 @@ public class ParcelLogController {
     @PostMapping("/changeStatus")
     ResponseEntity<?> changeStatus (@RequestBody ChangeParcelPropertiesResponse changeParcelStatusResponse) {
 
-
-        Parcel parcel = parcelRepository.findByparcelId(changeParcelStatusResponse.getParcelId());
-
-
-        ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
+try {
+    Parcel parcel = parcelRepository.findByparcelId(changeParcelStatusResponse.getParcelId());
 
 
-        parcelLog.setStatus(changeParcelStatusResponse.getStatus());
+    ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
 
-        parcelLogRepository.save(parcelLog);
-        return ResponseEntity.ok("Status Changes Successfully");
 
+    parcelLog.setStatus(changeParcelStatusResponse.getStatus());
+
+    parcelLogRepository.save(parcelLog);
+    return ResponseEntity.ok("Status Changes Successfully");
+} catch (Exception e) {
+    throw new RuntimeException(e);
+}
     }
 
 
@@ -52,45 +53,45 @@ public class ParcelLogController {
     ResponseEntity<?> changeLocation (@RequestBody ChangeParcelPropertiesResponse changeParcelLocationResponse) {
 
 
-/*        private Long parcelId;
-        private ParcelStatus status;
-        Location location;
-        private Long riderId;
-        private String deliveredDate;
-*/
-
-        Parcel parcel = parcelRepository.findByparcelId(changeParcelLocationResponse.getParcelId());
+try {
+    Parcel parcel = parcelRepository.findByparcelId(changeParcelLocationResponse.getParcelId());
 
 
-        ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
+    ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
 
-        Rider currentRider = parcelLog.getCurrentRider();
+    Batch batch = parcel.getBatch();
+    Rider currentRider = batch.getRider();
 
-        Location newLocation = locationRepository.findFirstByCity(changeParcelLocationResponse.getLocation());
-        System.out.println(newLocation);
-          Location oldLocation = parcelLog.getLocation();
-        // Location newLocation = changeParcelLocationResponse.getLocation();
+    //Rider currentRider = parcelLog.getCurrentRider();
 
-        System.out.println(newLocation.getCity());
-        System.out.println(oldLocation.getCity());
+    Location newLocation = locationRepository.findFirstByCity(changeParcelLocationResponse.getLocation());
+    System.out.println(newLocation);
+    Location oldLocation = parcelLog.getLocation();
+    // Location newLocation = changeParcelLocationResponse.getLocation();
 
-        float parcelWeight = parcel.getWeight();
+    System.out.println(newLocation.getCity());
+    System.out.println(oldLocation.getCity());
 
-        Route routeFollowed = routeRepository.findByDestinationAndOrigin(newLocation,oldLocation);
+    float parcelWeight = parcel.getWeight();
 
-        float riderPayment = (float) (routeFollowed.getBasePayment()*parcelWeight*0.15);
+    Route routeFollowed = routeRepository.findByDestinationAndOrigin(newLocation, oldLocation);
 
-        currentRider.setDueAmount(currentRider.getDueAmount() + riderPayment);
+    float riderPayment = (float) (routeFollowed.getBasePayment() * parcelWeight * 0.03);
 
-        parcelLog.setLocation(newLocation);
+    currentRider.setDueAmount(currentRider.getDueAmount() + riderPayment);
+
+    parcelLog.setLocation(newLocation);
 
 
-        parcelLogRepository.save(parcelLog);
-        return ResponseEntity.ok("Status Changes Successfully");
+    parcelLogRepository.save(parcelLog);
+    return ResponseEntity.ok("Status Changes Successfully");
 
+} catch (Exception e) {
+    throw new RuntimeException(e);
+}
     }
 
-    @PostMapping("/changeCurrentRider")
+  /*  @PostMapping("/changeCurrentRider")
     ResponseEntity<?> changeCurrentRider (@RequestBody ChangeParcelPropertiesResponse changeCurrentRiderResponse) {
 
 
@@ -99,14 +100,16 @@ public class ParcelLogController {
 
         ParcelLog parcelLog = parcelLogRepository.findByParcelId(parcel);
         System.out.println(parcelLog.getLogId());
-        System.out.println(parcelLog.getCurrentRider());
+        //System.out.println(parcelLog.getCurrentRider());
         Rider rider = riderRepository.findByUserId(changeCurrentRiderResponse.getRiderId());
-        parcelLog.setCurrentRider(rider);
-        System.out.println(parcelLog.getCurrentRider());
+        //parcelLog.setCurrentRider(rider);
+        //System.out.println(parcelLog.getCurrentRider());
         parcelLogRepository.save(parcelLog);
         return ResponseEntity.ok("Status Changes Successfully");
 
     }
+    */
+
     @PostMapping("/changeDeliveredDate")
     ResponseEntity<?> changeDeliveredDate (@RequestBody ChangeParcelPropertiesResponse changeDeliveredDateResponse) {
 

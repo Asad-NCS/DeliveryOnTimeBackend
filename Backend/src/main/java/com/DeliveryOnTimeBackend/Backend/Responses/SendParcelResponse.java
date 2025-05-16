@@ -26,6 +26,6 @@ public class SendParcelResponse {
     private String type;
     private float weight;
     private String address;
-
+    private String sendAddress;
 
 }

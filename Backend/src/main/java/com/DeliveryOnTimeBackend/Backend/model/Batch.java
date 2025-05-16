@@ -20,16 +20,21 @@ public class Batch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long batchId;
 
+    private float weight;
     @ManyToOne
-    @JoinColumn(name = "destination_id", referencedColumnName = "locationId")
+    @JoinColumn(name = "destination", referencedColumnName = "locationId")
     private Location destination;
 
+   // @ManyToOne
+    //@JoinColumn(name = "origin", referencedColumnName = "locationId")
+    //private Location origin;
+
     @ManyToOne
-    @JoinColumn(name = "current_location_id", referencedColumnName = "locationId")
+    @JoinColumn(name = "currentLocation", referencedColumnName = "locationId")
     private Location currentLocation;
 
-    @OneToMany(mappedBy = "batch")
-    private List<Parcel> parcels;
+  //  @OneToMany(mappedBy = "batch")
+   // private List<Parcel> parcels;
 
     @Enumerated(EnumType.STRING)
     private BatchStatus status;
@@ -38,5 +43,5 @@ public class Batch {
     @JoinColumn(name = "rider_id")
     private Rider rider;
 
-    private Integer maxParcels = 10;
+
 }

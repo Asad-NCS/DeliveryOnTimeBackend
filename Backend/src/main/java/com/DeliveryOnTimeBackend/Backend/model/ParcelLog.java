@@ -36,9 +36,9 @@ public class ParcelLog {
    // @JoinColumn(name = "updatedByUserId")
    // private User updatedBy;
 
-    @ManyToOne
-    @JoinColumn(name = "currentRider",referencedColumnName = "userId")
-    private Rider currentRider;
+    //  @ManyToOne
+    // @JoinColumn(name = "currentRider",referencedColumnName = "userId")
+    //private Rider currentRider;
     private String deliveredDate;
 
 
