@@ -2,6 +2,7 @@ package com.DeliveryOnTimeBackend.Backend.controller;
 
 
 import com.DeliveryOnTimeBackend.Backend.Responses.ChangeParcelPropertiesResponse;
+import com.DeliveryOnTimeBackend.Backend.extras.ParcelStatus;
 import com.DeliveryOnTimeBackend.Backend.model.*;
 import com.DeliveryOnTimeBackend.Backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +126,8 @@ try {
         System.out.println(parcelLog.getDeliveredDate());
         parcelLog.setDeliveredDate(changeDeliveredDateResponse.getDeliveredDate());
         System.out.println(parcelLog.getDeliveredDate());
+        parcelLog.setStatus(ParcelStatus.DELIVERED);
+
         parcelLogRepository.save(parcelLog);
         return ResponseEntity.ok("Status Changes Successfully");
 

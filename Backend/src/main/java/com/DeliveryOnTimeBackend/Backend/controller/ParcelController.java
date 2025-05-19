@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -59,11 +60,11 @@ public class ParcelController {
         Location destination = locationRepository.findFirstByCityAndCountry(response.getDestinationCity(), response.getDestinationCountry());
         Location origin = locationRepository.findFirstByCityAndCountry(response.getOriginCity(), response.getOriginCountry());
 
-        // System.out.println(response.getDestinationCountry() + " " + response.getDestinationCity());
-        //System.out.println(response.getOriginCountry() + " " + response.getOriginCity());
+        System.out.println(response.getDestinationCountry() + " " + response.getDestinationCity());
+        System.out.println(response.getOriginCountry() + " " + response.getOriginCity());
 
-        //System.out.println(destination);
-        //System.out.println(origin);
+        System.out.println(destination);
+        System.out.println(origin);
 
         Batch batch = batchRepository.findByCurrentLocationAndDestinationAndStatusAndWeightLessThan(origin,destination,BatchStatus.Pending,100);
 
@@ -111,6 +112,15 @@ public class ParcelController {
     } catch (Exception e) {
         throw new RuntimeException(e);
     }}
+
+    @GetMapping("/getparcelsofbatch")
+    public List<Parcel> getParcelsOfBatch(@RequestParam long batchId){
+
+        Batch batch = batchRepository.findByBatchId(batchId);
+
+        return parcelRepository.findByBatch(batch);
+
+    }
 
 }
 /*  @Id

@@ -38,7 +38,9 @@ public class BatchController {
     ResponseEntity<?> dropBatch (@RequestParam long batchId) {
         Batch batch = batchRepository.findByBatchId(batchId);
         batch.setRider(null);
-        batch.setStatus(BatchStatus.Pending);
+        batch.setStatus(BatchStatus.Ready);
+        System.out.println("Batch"+batchId+"dropped");
+        batchRepository.save(batch);
         return ResponseEntity.ok("Dropped");
     }
 
@@ -137,7 +139,7 @@ public class BatchController {
         Optional<Optional<Location>> locationOpt = Optional.ofNullable(locationRepository.findByCityAndCountry(city, country));
 
         if (locationOpt.isPresent()) {
-            return batchRepository.findByCurrentLocation(locationOpt.get());
+            return batchRepository.findByCurrentLocationAndStatus(locationOpt.get() , BatchStatus.Ready);
         }
         return List.of();
     }
@@ -159,9 +161,18 @@ public class BatchController {
         rider.setUserId(req.getRiderId());
 
         batch.setRider(rider);
-        batch.setStatus(BatchStatus.Ready);  // Changed from Batch.BatchStatus.READY
+        batch.setStatus(BatchStatus.IN_TRANSIT);  // Changed from Batch.BatchStatus.READY
 
         return batchRepository.save(batch);
+    }
+
+    @GetMapping("/getriderbatches")
+    public List<Batch> getBatchesOfRider(@RequestParam long riderId){
+
+        Rider rider = riderRepository.findByUserId(riderId);
+
+        return batchRepository.findByRider(rider);
+
     }
 
     static class AssignRiderRequest {

@@ -12,7 +12,6 @@ public class ChangeParcelPropertiesResponse {
 
     private Long parcelId;
     private ParcelStatus status;
-    //Location location;
     String Location;
     private Long riderId;
     private String deliveredDate;

@@ -25,7 +25,7 @@ public class Rider extends User {
     private Vehicle vehicleId;
 
     @Column(nullable = true)
-    private int accoundNo;
+    private String accoundNo;
     private float dueAmount = 0;
 
  //   public Rider(User user) {

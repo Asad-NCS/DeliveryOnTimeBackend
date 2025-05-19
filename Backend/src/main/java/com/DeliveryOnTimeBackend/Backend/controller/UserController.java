@@ -1,8 +1,7 @@
-
-
 package com.DeliveryOnTimeBackend.Backend.controller;
 
 import com.DeliveryOnTimeBackend.Backend.Responses.ChangeDueAmountResponse;
+import com.DeliveryOnTimeBackend.Backend.Responses.SignUpResponse;
 import com.DeliveryOnTimeBackend.Backend.extras.AccountType;
 import com.DeliveryOnTimeBackend.Backend.model.Admin;
 import com.DeliveryOnTimeBackend.Backend.model.Customer;
@@ -38,71 +37,71 @@ public class UserController {
 
 
 
-@GetMapping
-public List<User> getAllUsers(){
-    return userRepository.findAll();
-}
-
-
-@PostMapping("/changeDueAmount")
-public ResponseEntity<?> changeDueAmount(@RequestBody ChangeDueAmountResponse changeDueAmountResponse){
-    Rider rider = riderRepository.findByUserId(changeDueAmountResponse.getRiderId());
-    rider.setDueAmount(changeDueAmountResponse.getAmount());
-
-    riderRepository.save(rider);
-
-    return ResponseEntity.ok("Amount Has been Changed");
-}
-
-
-@PostMapping("/addUser")
-public User addUser(@RequestBody User user){
-    return userRepository.save(user);
-}
-
-   @PostMapping("/signUp")
-   ResponseEntity<?> signUp(@RequestBody User user){
-
-    if(userRepository.findByEmail(user.getEmail()).isPresent()){
-        return ResponseEntity.badRequest().body(("Email is already in Use"));
+    @GetMapping
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
     }
 
-    if(user.getAccountType() == AccountType.Rider){
-        Rider rider = new Rider();
-        rider.setName(user.getName());
-        rider.setEmail(user.getEmail());
-        rider.setPhone(user.getPhone());
-        rider.setPassword(user.getPassword());
-        rider.setAccountType(user.getAccountType());
-        rider.setDueAmount(0);
-        rider.setAccoundNo(111);
+
+    @PostMapping("/changeDueAmount")
+    public ResponseEntity<?> changeDueAmount(@RequestBody ChangeDueAmountResponse changeDueAmountResponse){
+        Rider rider = riderRepository.findByUserId(changeDueAmountResponse.getRiderId());
+        rider.setDueAmount(changeDueAmountResponse.getAmount());
 
         riderRepository.save(rider);
+
+        return ResponseEntity.ok("Amount Has been Changed");
     }
-       if(user.getAccountType() == AccountType.Customer){
-           Customer customer = new Customer();
-           customer.setName(user.getName());
-           customer.setEmail(user.getEmail());
-           customer.setPhone(user.getPhone());
-           customer.setPassword(user.getPassword());
-           customer.setAccountType(user.getAccountType()
-           );
-
-           customerRepository.save(customer);
-       }
 
 
-       if(user.getAccountType() == AccountType.Admin){
-           Admin customer = new Admin();
-           customer.setName(user.getName());
-           customer.setEmail(user.getEmail());
-           customer.setPhone(user.getPhone());
-           customer.setPassword(user.getPassword());
-           customer.setAccountType(user.getAccountType()
-           );
+    @PostMapping("/addUser")
+    public User addUser(@RequestBody User user){
+        return userRepository.save(user);
+    }
 
-           adminRepository.save(customer);
-       }
+    @PostMapping("/signUp")
+    ResponseEntity<?> signUp(@RequestBody SignUpResponse user){
+
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+            return ResponseEntity.badRequest().body(("Email is already in Use"));
+        }
+
+        if(user.getAccountType() == AccountType.Rider){
+            Rider rider = new Rider();
+            rider.setName(user.getName());
+            rider.setEmail(user.getEmail());
+            rider.setPhone(user.getPhone());
+            rider.setPassword(user.getPassword());
+            rider.setAccountType(user.getAccountType());
+            rider.setDueAmount(0);
+            rider.setAccoundNo(user.getAccountNo());
+
+            riderRepository.save(rider);
+        }
+        if(user.getAccountType() == AccountType.Customer){
+            Customer customer = new Customer();
+            customer.setName(user.getName());
+            customer.setEmail(user.getEmail());
+            customer.setPhone(user.getPhone());
+            customer.setPassword(user.getPassword());
+            customer.setAccountType(user.getAccountType());
+            customer.setAddress(user.getAddress());
+
+            customerRepository.save(customer);
+        }
+
+
+        if(user.getAccountType() == AccountType.Admin){
+            Admin customer = new Admin();
+            customer.setName(user.getName());
+            customer.setEmail(user.getEmail());
+            customer.setPhone(user.getPhone());
+            customer.setPassword(user.getPassword());
+            customer.setAccountType(user.getAccountType()
+            );
+
+            adminRepository.save(customer);
+        }
 
 
 
@@ -114,12 +113,12 @@ public User addUser(@RequestBody User user){
            Customer customer = new Customer(user);
            customerRepository.save(customer);
        }*/
-    return ResponseEntity.ok("User Has been regestered");
+        return ResponseEntity.ok("User Has been regestered");
 
 
 
 
-}
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
