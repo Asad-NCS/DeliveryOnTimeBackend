@@ -10,9 +10,11 @@ import com.DeliveryOnTimeBackend.Backend.extras.PaymentStatus;
 import com.DeliveryOnTimeBackend.Backend.model.*;
 import com.DeliveryOnTimeBackend.Backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -120,6 +122,16 @@ public class ParcelController {
 
         return parcelRepository.findByBatch(batch);
 
+    }
+
+    @GetMapping("/getparcelsofcustomer")
+    public ResponseEntity<?>getParcelsbyCustomerId(@RequestParam Long customerId) {
+        Customer customer = customerRepository.findByuserId(customerId);
+        if (customer == null) {return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found with ID " + customerId);}
+        List<Parcel> parcels = parcelRepository.findByCustomerId(customer);
+        if (parcels.isEmpty()) {return ResponseEntity.ok(Collections.emptyList());}//if empty
+
+        return ResponseEntity.ok(parcels);
     }
 
 }

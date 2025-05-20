@@ -25,9 +25,7 @@ public class Parcel{
 
     private String type;
     private float weight;
-    // @OneToOne
-    //@JoinColumn(name = "orderId", referencedColumnName = "orderId")
-    //private Orders orderId;
+
     @ManyToOne
     @JoinColumn(name = "originId", referencedColumnName = "locationId")
     private Location originId;
@@ -38,28 +36,14 @@ public class Parcel{
     String address;
     String sendAddress;
 
-    // @OneToMany(mappedBy = "parcelId", cascade = CascadeType.ALL)
-    //private List<ParcelLog> logs;
     @ManyToOne
     @JoinColumn(name = "customerId", referencedColumnName = "userId")
     private Customer customerId;
-   // @ManyToOne
-    //@JoinColumn(name = "paymentId", referencedColumnName = "paymentId")
-    //private Payment paymentId;
 
-    @ManyToOne//added to link batch and parcel tables together witht he use of foriegn key
+    @ManyToOne
     @JoinColumn(name = "batch_id")
     private Batch batch;
-    /*
-        public Parcel(String type, float weight, Location destination, Orders order, Location origin) {
-            this.type = type;
-            this.weight = weight;
-            this.destinationId = destination;
-          //  this.orderId = order;
-            this.originId = origin;
 
-        }
-    */
     public Parcel(String type, float weight, Location origin, Location destination, Customer customer, Object o,String address,String sendAddress,Batch batch) {
 
         this.type = type;
