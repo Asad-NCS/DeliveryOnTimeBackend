@@ -72,19 +72,40 @@ public class ParcelController {
 
 
         if(batch == null || batch.getWeight() + response.getWeight() > 100){
-             batch = new Batch(null,response.getWeight(),destination,origin, BatchStatus.Pending,null);
+            if(response.getWeight() >= 80)
+                batch = new Batch(null,response.getWeight(),destination,origin, BatchStatus.Ready,null);
+            else if(response.getWeight() < 80 )
+                batch = new Batch(null,response.getWeight(),destination,origin, BatchStatus.Pending,null);
+
             batchRepository.save(batch);
 
 
         }
         else {
             batch.setWeight(batch.getWeight() + response.getWeight());
-            if(batch.getWeight() > 80)
+            if(batch.getWeight() >= 80)
                 batch.setStatus(BatchStatus.Ready);
             batchRepository.save(batch);
         }
 
 
+ /*       Batch batch = batchRepository.findByCurrentLocationAndDestinationAndStatusAndWeightLessThan(
+                origin, destination, BatchStatus.Pending, 100);
+
+// Case 1: No batch found OR batch is full or near-full (>=80 or would exceed 100)
+        if (batch == null || batch.getWeight() >= 80 || (batch.getWeight() + response.getWeight() > 100)) {
+            BatchStatus status = response.getWeight() >= 80 ? BatchStatus.Ready : BatchStatus.Pending;
+
+            batch = new Batch(null, response.getWeight(), destination, origin, status, null);
+            batchRepository.save(batch);
+        } else {
+            // Case 2: Add to existing batch
+            batch.setWeight(batch.getWeight() + response.getWeight());
+            if (batch.getWeight() >= 80)
+                batch.setStatus(BatchStatus.Ready);
+            batchRepository.save(batch);
+        }
+*/
 
         Parcel parcel = new Parcel(response.getType(), response.getWeight(), origin, destination, customer, null, response.getAddress(),response.getSendAddress(),batch);
 
